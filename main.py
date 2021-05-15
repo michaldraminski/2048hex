@@ -38,8 +38,6 @@ import random
 import xml.etree.ElementTree as ET
 import re
 from layout import Ui_MainWindow
-from numpy import (array, dot, arccos, clip)
-from numpy.linalg import norm
 
 # rozmiar jednego heksagonu
 hexSize = 60
@@ -467,12 +465,33 @@ class Window(QMainWindow, Ui_MainWindow):
     def mousePressEvent(self, event):
         #super(Window, self).mousePressEvent(event)
         #print('x: {0}, y: {1}'.format(self.pos().x(), self.pos().y()))
-        print('x :', event.x(), 'y :', event.y(), )
+        self.tempx = event.x()
+        self.tempy = event.y()
 
 
     def mouseReleaseEvent(self, event):
         #super(Window, self).mouseReleaseEvent(event)
-        print('x :', event.x(), 'y :', event.y(), )
+        delta_y = event.y() - self.tempy
+        delta_x = event.x() - self.tempx
+        vect_len = math.sqrt(delta_x**2+delta_y**2)
+        angle = 180 + math.atan2(delta_y, -delta_x) * 180 / math.pi
+        margin = 20
+        if vect_len > 100:
+            if angle > 360 - margin or angle < 0 + margin:
+                self.plansza.moveEFull()
+            if 60 - margin < angle < 60 + margin:
+                self.plansza.moveNEFull()
+            if 120 - margin < angle < 120 + margin:
+                self.plansza.moveNWFull()
+            if 180 - margin < angle < 180 + margin:
+                self.plansza.moveWFull()
+            if 240 - margin < angle < 240 + margin:
+                self.plansza.moveSWFull()
+            if 300 - margin < angle < 300 + margin:
+                self.plansza.moveSEFull()
+
+
+
 
 
 if __name__ == '__main__':
