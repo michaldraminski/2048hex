@@ -6,35 +6,178 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>890</width>
-    <height>786</height>
+    <width>625</width>
+    <height>775</height>
    </rect>
   </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>hex2048</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>2048.png</normaloff>2048.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGraphicsView" name="graphicsView">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>40</y>
+      <x>0</x>
+      <y>0</y>
       <width>621</width>
       <height>571</height>
      </rect>
     </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QPushButton" name="button1">
+   <widget class="QPushButton" name="new_game_button">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>660</y>
+      <x>400</x>
+      <y>580</y>
       <width>131</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>przycisk testowy</string>
+     <string>New Game</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="NWbutton">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>590</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>NW</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Wbutton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>640</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>W</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="NEbutton">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>590</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>NE</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="SEbutton">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>690</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SE</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="SWbutton">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>690</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SW</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Ebutton">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>640</y>
+      <width>50</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>E</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="save_button">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>630</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save progress</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="load_button">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>680</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Load saved file</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="undo_button">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>600</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Undo</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exit_button">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>650</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>EXIT</string>
     </property>
    </widget>
   </widget>
@@ -43,7 +186,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>890</width>
+     <width>625</width>
      <height>21</height>
     </rect>
    </property>

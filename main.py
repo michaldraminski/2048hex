@@ -38,6 +38,8 @@ import random
 import xml.etree.ElementTree as ET
 import re
 from layout import Ui_MainWindow
+from numpy import (array, dot, arccos, clip)
+from numpy.linalg import norm
 
 # rozmiar jednego heksagonu
 hexSize = 60
@@ -166,14 +168,20 @@ class GridModel:
 
         tree = ET.ElementTree(xml_doc)
         tree.write("state.xml", encoding='UTF-8', xml_declaration=True)
+        print("\nZAPISANO")
 
 
     def load_state(self):
-        with open("state.xml",'rt') as f:
-            tree = ET.ElementTree()
-            tree.parse(f)
-            saved_state = tree.find("saved_state").text
-            self.pola = convert(saved_state)
+        try:
+            with open("state.xml",'rt') as f:
+                tree = ET.ElementTree()
+                tree.parse(f)
+                saved_state = tree.find("saved_state").text
+                self.pola = convert(saved_state)
+                create_scene(self.scene, self)
+            print("\nWCZYTANO")
+        except:
+            print("Plik z zapisaną grą nie został znaleziony!")
 
 
 
@@ -319,15 +327,21 @@ class GridModel:
         for pole in self.pola:
             pole[2] = emptyChar
             pole[3] = False
+        print("\nNOWA GRA: ")
+        self.new_number()
+        create_scene(self.scene, self)
 
     def moveWFull(self):
-        self.clearCombinedFields()
         self.clearCombinedFields()
         moved = False
         while self.moveW():
             moved = True
             continue
-        return moved
+        if moved:
+            print(Colors.GREEN + "* lewo (a)" + Colors.ENDC)
+            self.new_number()
+            create_scene(self.scene, self)
+
 
 
     def moveEFull(self):
@@ -337,8 +351,10 @@ class GridModel:
             moved = True
             continue
         self.scene.update()
-
-        return moved
+        if moved:
+            print(Colors.CYAN + "* prawo (d)" + Colors.ENDC)
+            self.new_number()
+            create_scene(self.scene, self)
 
     def moveNEFull(self):
         self.clearCombinedFields()
@@ -346,7 +362,12 @@ class GridModel:
         while self.moveNE():
             moved = True
             continue
-        return moved
+        if moved:
+            print(Colors.RED + "* góra-prawo (e)" + Colors.ENDC)
+            self.new_number()
+            create_scene(self.scene, self)
+
+
 
     def moveNWFull(self):
         self.clearCombinedFields()
@@ -354,7 +375,11 @@ class GridModel:
         while self.moveNW():
             moved = True
             continue
-        return moved
+        if moved:
+            print(Colors.BLUE + "* góra-lewo (q)" + Colors.ENDC)
+            self.new_number()
+            create_scene(self.scene, self)
+
 
     def moveSWFull(self):
         self.clearCombinedFields()
@@ -362,7 +387,10 @@ class GridModel:
         while self.moveSW():
             moved = True
             continue
-        return moved
+        if moved:
+            print(Colors.MAGENTA + "* dół-lewo (z)" + Colors.ENDC)
+            self.new_number()
+            create_scene(self.scene, self)
 
     def moveSEFull(self):
         self.clearCombinedFields()
@@ -370,7 +398,10 @@ class GridModel:
         while self.moveSE():
             moved = True
             continue
-        return moved
+        if moved:
+            print(Colors.YELLOW + "* dół-prawo (c)" + Colors.ENDC)
+            self.new_number()
+            create_scene(self.scene, self)
 
 
 class Window(QMainWindow, Ui_MainWindow):
@@ -388,7 +419,16 @@ class Window(QMainWindow, Ui_MainWindow):
 
         create_scene(self.scene, self.plansza)
 
-        self.button1.clicked.connect(self.plansza.moveEFull)
+        self.new_game_button.clicked.connect(self.plansza.new_game)
+        self.save_button.clicked.connect(self.plansza.save_state)
+        self.load_button.clicked.connect(self.plansza.load_state)
+        self.NEbutton.clicked.connect(self.plansza.moveNEFull)
+        self.Ebutton.clicked.connect(self.plansza.moveEFull)
+        self.SEbutton.clicked.connect(self.plansza.moveSEFull)
+        self.SWbutton.clicked.connect(self.plansza.moveSWFull)
+        self.NWbutton.clicked.connect(self.plansza.moveNWFull)
+        self.Wbutton.clicked.connect(self.plansza.moveWFull)
+        self.exit_button.clicked.connect(sys.exit)
 
         # for x in range (rozmiarPlanszy) :
         #     for y in range(rozmiarPlanszy):
@@ -405,41 +445,34 @@ class Window(QMainWindow, Ui_MainWindow):
     def keyPressEvent(self, event):
 
         if event.key() == Qt.Key_Q:
-            if self.plansza.moveNWFull():
-                print(Colors.BLUE + "* góra-lewo (q)" + Colors.ENDC)
-                self.plansza.new_number()
+            self.plansza.moveNWFull()
         if event.key() == Qt.Key_E:
-            if self.plansza.moveNEFull():
-                print(Colors.RED + "* góra-prawo (e)" + Colors.ENDC)
-                self.plansza.new_number()
+            self.plansza.moveNEFull()
         if event.key() == Qt.Key_A:
-            if self.plansza.moveWFull():
-                print(Colors.GREEN + "* lewo (a)" + Colors.ENDC)
-                self.plansza.new_number()
+            self.plansza.moveWFull()
         if event.key() == Qt.Key_D:
-            if self.plansza.moveEFull():
-                print(Colors.CYAN + "* prawo (d)" + Colors.ENDC)
-                self.plansza.new_number()
+            self.plansza.moveEFull()
         if event.key() == Qt.Key_Z:
-            if self.plansza.moveSWFull():
-                print(Colors.MAGENTA + "* dół-lewo (z)" + Colors.ENDC)
-                self.plansza.new_number()
+            self.plansza.moveSWFull()
         if event.key() == Qt.Key_C:
-            if self.plansza.moveSEFull():
-                print(Colors.YELLOW + "* dół-prawo (c)" + Colors.ENDC)
-                self.plansza.new_number()
+            self.plansza.moveSEFull()
         if event.key() == Qt.Key_N:
-            print("\nNOWA GRA: ")
             self.plansza.new_game()
-            self.plansza.new_number()
+
         if event.key() == Qt.Key_P:
-            print("\nZAPISANO")
             self.plansza.save_state()
         if event.key() == Qt.Key_L:
-            print("\nWCZYTANO")
             self.plansza.load_state()
 
-        create_scene(self.scene, self.plansza)
+    def mousePressEvent(self, event):
+        #super(Window, self).mousePressEvent(event)
+        #print('x: {0}, y: {1}'.format(self.pos().x(), self.pos().y()))
+        print('x :', event.x(), 'y :', event.y(), )
+
+
+    def mouseReleaseEvent(self, event):
+        #super(Window, self).mouseReleaseEvent(event)
+        print('x :', event.x(), 'y :', event.y(), )
 
 
 if __name__ == '__main__':
